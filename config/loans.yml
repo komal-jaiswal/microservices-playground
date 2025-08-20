@@ -1,0 +1,11 @@
+build:
+  version: "3.0.0"
+
+accounts:
+  message: "welcome to loan microservice apis - default"
+  contactDetails:
+    name: "komal jaiswal"
+    email: "jaiswalkomal18@gmail.com"
+  onCallSupport:
+    -(555)555-1234
+    -(555)523-1234

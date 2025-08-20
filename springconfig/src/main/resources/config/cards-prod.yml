@@ -1,0 +1,10 @@
+build:
+  version: 1.0.0
+cards:
+  message: "Welcome to cards microservice api - prod"
+  contactDetails:
+    name: "Moazzam khan - Manager"
+    email: "moazzam@gmail.com"
+  onCallSupport:
+    -(555)555-1234
+    -(555)523-1234

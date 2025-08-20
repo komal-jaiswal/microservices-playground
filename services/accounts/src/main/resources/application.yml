@@ -1,0 +1,46 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "accounts"
+  config:
+    import: "configserver:http://localhost:8071/"
+  profiles:
+    active: "prod"
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: "*"
+#  config:
+#    import:
+#      - "application_qa.yml"
+#      - "application_prod.yml"
+#  profiles:
+#    active: "qa"
+
+#These properties will read from config server, hence commenting out
+#build:
+#  version: "3.0.0"
+#
+#accounts:
+#  message: "welcome to accounts microservice apis"
+#  contactDetails:
+#    name: "komal jaiswal"
+#    email: "jaiswalkomal18@gmail.com"
+#  onCallSupport:
+#    -(555)555-1234
+#    -(555)523-1234

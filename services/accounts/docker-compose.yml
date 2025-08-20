@@ -1,0 +1,16 @@
+services:
+  accounts-microservice:
+    image: "jaiswalkomal18/accounts-microservice:1.0.0"
+    container_name: accounts-ms
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+networks:
+  komalj:
+    driver: "bridge"
+

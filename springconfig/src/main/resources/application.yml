@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: "configserver"
+  profiles:
+    #    active: native
+    active: git
+  cloud:
+    config:
+      server:
+        #        native:
+
+        #          search-locations: "file:///Users//komaljaiswal//Documents//microservices-plyground//config"
+        #this one is if configs are present in classpath of server
+        #search-locations: "classpath:/config"
+        #when configs are in file system in remote/ at server loc
+
+        git:
+          uri: "https://github.com/komal-jaiswal/microservices-config.git"
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+encrypt:
+  key: "Ga+#v/D~fPCv{v=h]O(3K%(uz1AHbz"
+
+server:
+  port: 8071
