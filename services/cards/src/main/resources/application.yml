@@ -7,7 +7,12 @@ spring:
     active: "qa"
   config:
     import: "configserver:http://localhost:8071/"
-
+  #Here we are mentioning where is our message queue
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
