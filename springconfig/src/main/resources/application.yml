@@ -8,11 +8,11 @@ spring:
     config:
       server:
         #        native:
-
+        #when configs are in file system in remote/ at server loc
         #          search-locations: "file:///Users//komaljaiswal//Documents//microservices-plyground//config"
         #this one is if configs are present in classpath of server
         #search-locations: "classpath:/config"
-        #when configs are in file system in remote/ at server loc
+
 
         git:
           uri: "https://github.com/komal-jaiswal/microservices-config.git"
@@ -20,8 +20,27 @@ spring:
           timeout: 5
           clone-on-start: true
           force-pull: true
+  rabbitmq:
+    password: "guest"
+    username: "guest"
+    port: 5672
+    host: "localhost"
 encrypt:
   key: "Ga+#v/D~fPCv{v=h]O(3K%(uz1AHbz"
 
 server:
   port: 8071
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" #required for invoking actuator/busrefresh
+  health: #this is to first make sure config server is live and ready to accept traffic then only start account/loan and card ms
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true

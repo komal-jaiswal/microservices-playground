@@ -10,6 +10,29 @@ services:
           memory: 700mb
     networks:
       - "komalj"
+  loans-microservice:
+    image: "jaiswalkomal18/loans-microservice:1.0.0"
+    container_name: loans-ms
+    ports:
+      - "8090:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+
+  cards-microservice:
+    image: "jaiswalkomal18/cards-microservice:1.0.0"
+    container_name: cards-ms
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
 networks:
   komalj:
     driver: "bridge"

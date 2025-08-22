@@ -1,0 +1,95 @@
+services:
+  rabbit:
+    image: rabbitmq:4.1.3-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+  configserver-microservice:
+    #s6 is tag represent section 6 assignment
+    image: "jaiswalkomal18/configserver-microservice:s6"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+  accounts-microservice:
+    #s6 is tag represent section 6 assignment
+    image: "jaiswalkomal18/accounts-microservice:s6"
+    container_name: accounts-ms
+    ports:
+      - "8080:8080"
+    depends_on:
+      configserver-microservice:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_APPLICATION_NAME: "accounts"
+  loans-microservice:
+    image: "jaiswalkomal18/loans-microservice:s6"
+    container_name: loans-ms
+    ports:
+      - "8090:8090"
+    depends_on:
+      configserver-microservice:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_APPLICATION_NAME: "loans"
+
+  cards-microservice:
+    image: "jaiswalkomal18/cards-microservice:s6"
+    container_name: cards-ms
+    ports:
+      - "9000:9000"
+    depends_on:
+      configserver-microservice:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      - "komalj"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_APPLICATION_NAME: "cards"
+networks:
+  komalj:
+    driver: "bridge"
+
