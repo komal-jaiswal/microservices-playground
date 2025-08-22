@@ -1,0 +1,24 @@
+services:
+  #1st service
+  network-deploy-service:
+    networks:
+      - komalj
+  #2nd service
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+
+
+  #3rd service
+  microservice-configserver-config:
+    extends: microservice-base-config
+    depends_on:
+      configserver-microservice:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"

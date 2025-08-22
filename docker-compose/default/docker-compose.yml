@@ -11,6 +11,10 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   configserver-microservice:
     #s6 is tag represent section 6 assignment
     image: "jaiswalkomal18/configserver-microservice:s6"
@@ -26,69 +30,44 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
 
-    deploy:
-      resources:
-        limits:
-          memory: 700mb
-    networks:
-      - "komalj"
   accounts-microservice:
     #s6 is tag represent section 6 assignment
     image: "jaiswalkomal18/accounts-microservice:s6"
     container_name: accounts-ms
     ports:
       - "8080:8080"
-    depends_on:
-      configserver-microservice:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 700mb
-    networks:
-      - "komalj"
     environment:
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
-      SPRING_PROFILES_ACTIVE: default
       SPRING_APPLICATION_NAME: "accounts"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
   loans-microservice:
     image: "jaiswalkomal18/loans-microservice:s6"
     container_name: loans-ms
     ports:
       - "8090:8090"
-    depends_on:
-      configserver-microservice:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 700mb
-    networks:
-      - "komalj"
     environment:
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
-      SPRING_PROFILES_ACTIVE: default
       SPRING_APPLICATION_NAME: "loans"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 
   cards-microservice:
     image: "jaiswalkomal18/cards-microservice:s6"
     container_name: cards-ms
     ports:
       - "9000:9000"
-    depends_on:
-      configserver-microservice:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 700mb
-    networks:
-      - "komalj"
     environment:
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
-      SPRING_PROFILES_ACTIVE: default
       SPRING_APPLICATION_NAME: "cards"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
 networks:
   komalj:
     driver: "bridge"
