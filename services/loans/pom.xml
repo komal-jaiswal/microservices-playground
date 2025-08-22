@@ -76,6 +76,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+            <version>4.3.0</version>
         </dependency>
     </dependencies>
 
@@ -96,6 +97,19 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:21-jre</image>
+                    </from>
+                    <to>
+                        <image>jaiswalkomal18/${project.artifactId}:s6</image>
+                    </to>
                 </configuration>
             </plugin>
         </plugins>

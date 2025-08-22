@@ -36,7 +36,7 @@ services:
 
   accounts-microservice:
     #s6 is tag represent section 6 assignment
-    image: "jaiswalkomal18/accounts-microservice:s6"
+    image: "jaiswalkomal18/accounts:s6"
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -47,7 +47,7 @@ services:
       service: microservice-configserver-config
 
   loans-microservice:
-    image: "jaiswalkomal18/loans-microservice:s6"
+    image: "jaiswalkomal18/loans:s6"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -58,10 +58,10 @@ services:
       service: microservice-configserver-config
 
   cards-microservice:
-    image: "jaiswalkomal18/cards-microservice:s6"
+    image: "jaiswalkomal18/cards:s6"
     container_name: cards-ms
     ports:
-      - "9000:9000"
+      - "9091:9091"
     environment:
       SPRING_APPLICATION_NAME: "cards"
     extends:
