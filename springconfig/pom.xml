@@ -97,7 +97,7 @@
                     </to>
                 </configuration>
             </plugin>
-		</plugins>config
+		</plugins>
 	</build>
 
 </project>
