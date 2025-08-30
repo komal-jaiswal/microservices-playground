@@ -2,12 +2,12 @@ package com.learning.accounts.mapper;
 
 import com.learning.accounts.dto.AccountDto;
 import com.learning.accounts.dto.CustomerDto;
-import com.learning.accounts.entity.Account;
+import com.learning.accounts.entity.Accounts;
 import com.learning.accounts.entity.Customer;
 
 public class CustomerMapper {
 
-    public static CustomerDto mapToCustomerDto(Customer customer, Account account,CustomerDto customerDto) {
+    public static CustomerDto mapToCustomerDto(Customer customer, Accounts account,CustomerDto customerDto) {
         customerDto.setName(customer.getName());
         customerDto.setEmail(customer.getEmail());
         customerDto.setMobileNumber(customer.getMobileNumber());

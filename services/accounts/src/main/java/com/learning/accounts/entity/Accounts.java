@@ -2,7 +2,6 @@ package com.learning.accounts.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
@@ -10,7 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account extends BaseEntity {
+public class Accounts extends BaseEntity {
 
     @Column(name = "customer_id")
     private Long customerId;

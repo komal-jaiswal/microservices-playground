@@ -4,7 +4,7 @@ import com.learning.accounts.constants.AccountConstants;
 import com.learning.accounts.dto.AccountDto;
 import com.learning.accounts.dto.CustomerDto;
 import com.learning.accounts.dto.SlotRequest;
-import com.learning.accounts.entity.Account;
+import com.learning.accounts.entity.Accounts;
 import com.learning.accounts.entity.Customer;
 import com.learning.accounts.exception.ResourceAlreadyExistsException;
 import com.learning.accounts.exception.ResourceNotFoundException;
@@ -53,7 +53,7 @@ public class AccountServiceImpl implements IAccountService {
     public CustomerDto fetchAccountDetails(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(() -> new ResourceNotFoundException("customer", "mobileNumber", mobileNumber));
 
-        Account account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(() -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString()));
+        Accounts account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(() -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString()));
 
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, account, new CustomerDto());
         return customerDto;
@@ -66,14 +66,14 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public CustomerDto updateCustomerAndAccountDetails(CustomerDto customerDto) {
         AccountDto accountDto = customerDto.getAccountDto();
-        Account account = null;
+        Accounts account = null;
         if (customerDto.getAccountDto() != null) {
             account = accountRepository.findById(customerDto.getAccountDto().getAccountNumber()).orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", customerDto.getAccountDto().getAccountNumber().toString()));
             account = AccountsMapper.mapToAccounts(accountDto, account);
 
         }
         //IF account exists and payload doesn't contain modified account no , then fetch customer
-        Account finalAccount = account;
+        Accounts finalAccount = account;
         Customer customer = customerRepository.findById(account.getCustomerId()).orElseThrow(() -> new ResourceNotFoundException("Customer", "CustomerId", finalAccount.getCustomerId().toString()));
         //here save both account and customer
         CustomerMapper.mapToCustomer(customerDto, customer);
@@ -124,12 +124,14 @@ public class AccountServiceImpl implements IAccountService {
         return !(existingSlot[1] <= newSlot[0] || newSlot[1] <= existingSlot[0]);
     }
 
-    private Account createNewAccount(long customerId) {
-        Account account = new Account();
+    private Accounts createNewAccount(long customerId) {
+        Accounts account = new Accounts();
         account.setCustomerId(customerId);
         account.setAccountNumber(1000000L + new Random().nextInt(900000000));
         account.setAccountType(AccountConstants.SAVINGS);
         account.setBranchAddress(AccountConstants.ADDRESS);
+        account.setCreatedAt(LocalDateTime.now());
+        account.setCreatedBy("User1");
         account.setUpdatedBy("user1");
         account.setUpdatedAt(LocalDateTime.now());
         return account;
