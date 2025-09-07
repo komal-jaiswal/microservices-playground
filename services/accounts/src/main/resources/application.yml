@@ -43,6 +43,25 @@ management:
     web:
       exposure:
         include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+  #this info enabled true is allowing to show info properties on Eureka dashBOARD
+  info:
+    env:
+      enabled: true
+#this endpoint at root level is different from management endpoint
+endpoints:
+  shutdown:
+    enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
 #  config:
 #    import:
 #      - "application_qa.yml"
@@ -61,4 +80,10 @@ management:
 #    email: "jaiswalkomal18@gmail.com"
 #  onCallSupport:
 #    -(555)555-1234
+#This info is being displayed on Eureka dashboard
+info:
+  app:
+    name: "accounts"
+    description: "Accounts micro service"
+    version: "1.0.0"
 #    -(555)523-1234

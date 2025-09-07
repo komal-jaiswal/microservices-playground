@@ -1,5 +1,9 @@
 Git repo url: https://github.com/komal-jaiswal/microservices-config.git
 
+Current issues:
+1. unable to start eureka server
+2. docker compose AMD issue
+
 mvn clean install
 java -jar filename-SNAPSHOT-1.0.0.jar 
 

@@ -108,6 +108,10 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -157,7 +161,7 @@
                         <image>jaiswalkomal18/accounts-microservice:1.0.0</image>
                     </from>
                     <to>
-                        <image>jaiswalkomal18/${project.artifactId}:s7</image>
+                        <image>jaiswalkomal18/${project.artifactId}:s7eu</image>
                     </to>
                 </configuration>
             </plugin>
