@@ -9,6 +9,7 @@
     <module>services/accounts</module>
     <module>services/cards</module>
     <module>services/loans</module>
+    <module>eurekaserver</module>
 
 </modules>
     <groupId>com.fico.platform.decisioning</groupId>

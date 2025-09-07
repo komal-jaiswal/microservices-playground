@@ -19,6 +19,8 @@ brew install hookdeck/hookdeck/hookdeck
 hookdeck login --cli-key 1nrzzranio95zu4z7b1bh1t9s4gdgsuz2u82g4pf41x6curg12
 hookdeck listen 8071 source --cli-path /monitor
 
+RabbitMq image :- docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management
+
 #mysql commands
 1. accounts db
 docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql
