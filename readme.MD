@@ -1,3 +1,5 @@
+Git repo url: https://github.com/komal-jaiswal/microservices-config.git
+
 mvn clean install
 java -jar filename-SNAPSHOT-1.0.0.jar 
 
