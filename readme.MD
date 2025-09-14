@@ -23,7 +23,7 @@ hookdeck
 url : https://console.hookdeck.com
 brew install hookdeck/hookdeck/hookdeck
 hookdeck login --cli-key 1nrzzranio95zu4z7b1bh1t9s4gdgsuz2u82g4pf41x6curg12
-hookdeck listen 8071 source --cli-path /monitor
+hookdeck listen 8071 source --cli-path /monitors
 
 RabbitMq image :- docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management
 
