@@ -1,0 +1,9 @@
+build: 3.0.0
+cards:
+  message: "Welcome to cards microservice api -qa"
+  contactDetails:
+    name: "Rizwan police - QA owner"
+    email: "rizwan@gmail.com"
+  onCallSupport:
+    -(555)555-1234
+    -(555)523-1234

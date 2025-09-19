@@ -1,0 +1,35 @@
+#we're not externalizing these properties, hence commented
+#server:
+#  port: 8080
+#spring:
+#  datasource:
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password: ''
+#  h2:
+#    console:
+#      enabled: true
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: create
+#    show-sql: true
+#  config:
+#    import:
+#      - "accounts-qa.yml"
+#      - "accounts-prod.yml"
+#  profiles:
+#    active: "qa"
+
+build:
+  version: "3.0.0"
+
+accounts:
+  message: "welcome to accounts microservice apis"
+  contactDetails:
+    name: "komal jaiswal"
+    email: "jaiswalkomal18@gmail.com"
+  onCallSupport:
+    -(555)555-1234
+    -(555)523-1234

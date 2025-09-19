@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 <modules>
     <module>message</module>
-    <module>springconfig</module>
+    <module>configserver</module>
     <module>services/accounts</module>
     <module>services/cards</module>
     <module>services/loans</module>
     <module>eurekaserver</module>
+    <module>api-gateway</module>
 
 </modules>
     <groupId>com.fico.platform.decisioning</groupId>

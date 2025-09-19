@@ -1,0 +1,17 @@
+#these properties are not required since we're not using spring now, its spring cloud config server
+#spring:
+#  config:
+#    activate:
+#      on-profile: "qa"
+
+build:
+  version: "2.0.0"
+
+accounts:
+  message: "welcome to accounts qa microservice apis"
+  contactDetails:
+    name: "Rizwan - QA owner"
+    email: "rizwan8@gmail.com"
+  onCallSupport:
+    -(555)555-1234
+    -(555)523-1234
