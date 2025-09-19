@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: "api-gateway"
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+  config:
+    import: "configserver:http://localhost:8071/"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: unrestricted
+
+  #this info enabled true is allowing to show info properties on Eureka dashBOARD
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: "api-gateway"
+    description: "API-Gateway micro service"
+    version: "1.0.0"

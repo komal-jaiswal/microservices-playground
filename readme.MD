@@ -1,9 +1,10 @@
 Git repo url: https://github.com/komal-jaiswal/microservices-config.git
 
 steps to run without docker compose:
-run rabbitmq locally
+Run rabbitmq locally
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management
-run config server - springboot app
+Run config server - springboot app
+Run Eureka server - service discovery
 open sqlectron application
 run mysql image for three DB's -> Account,loan,cards
 1. accounts db
@@ -14,8 +15,7 @@ run mysql image for three DB's -> Account,loan,cards
    docker run -p 3308:3306 --name loansdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=loansdb -d mysql
 Test DB connection in sqlectron for all 3 DB's
 Run account ms, followed by loans and cards (springboot application)
-
-
+Run API gateway
 
 Current issues:
 1. unable to start eureka server
