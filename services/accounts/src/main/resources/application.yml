@@ -3,32 +3,14 @@ server:
 spring:
   application:
     name: "accounts"
-  config:
-    import: "configserver:http://localhost:8071/"
   profiles:
     active: "prod"
-
   #Here we are mentioning where is our message queue
   rabbitmq:
-    host: "localhost"
+    host: rabbitmq
     port: 5672
     username: "guest"
     password: "guest"
-
-#commenting H2 db conf since we are going to use mysql db
-#  datasource:
-#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-#    driverClassName: org.h2.Driver
-#    username: sa
-#    password: ''
-#  h2:
-#    console:
-#      enabled: true
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    hibernate:
-#      ddl-auto: create
-#    show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3306/accountsdb
     username: root
@@ -61,26 +43,7 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-#  config:
-#    import:
-#      - "application_qa.yml"
-#      - "application_prod.yml"
-#  profiles:
-#    active: "qa"
-
-#These properties will read from config server, hence commenting out
-#build:
-#  version: "3.0.0"
-#
-#accounts:
-#  message: "welcome to accounts microservice apis"
-#  contactDetails:
-#    name: "komal jaiswal"
-#    email: "jaiswalkomal18@gmail.com"
-#  onCallSupport:
-#    -(555)555-1234
-#This info is being displayed on Eureka dashboard
+      defaultZone: http://eureka-server:8761/eureka/
 info:
   app:
     name: "accounts"

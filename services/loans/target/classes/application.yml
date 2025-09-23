@@ -3,11 +3,16 @@ server:
 spring:
   application:
     name: "loans"
-  config:
-    import: "configserver:http://localhost:8071/"
+    #      this one commenting out for now because in docker compose we have to mention service name
+    #      localhost dont work
+    #      if we keep this while running docker compose it results in overring docker env  variable
+#  config:
+#    import: "configserver:http://localhost:8071/"
+  profiles:
+    active: "prod"
   #Here we are mentioning where is our message queue
   rabbitmq:
-    host: "localhost"
+    host: rabbitmq
     port: 5672
     username: "guest"
     password: "guest"
@@ -26,9 +31,42 @@ spring:
 #      ddl-auto: update
 #    show-sql: true
   datasource:
-    url: jdbc:mysql:localhost://3308/loansdb
+    url: jdbc:mysql://localhost:3308/loansdb
+    username: root
+    password: root
   jpa:
     show-sql: true
   sql:
     init:
       mode: always
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+        #this info enabled true is allowing to show info properties on Eureka dashBOARD
+  info:
+    env:
+      enabled: true
+  #this endpoint at root level is different from management endpoint
+endpoints:
+  shutdown:
+    enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+      #This info is being displayed on Eureka dashboard
+info:
+  app:
+    name: "loans"
+    description: "Loans micro service"
+    version: "1.0.0"
+

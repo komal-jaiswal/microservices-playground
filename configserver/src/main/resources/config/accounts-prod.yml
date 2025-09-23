@@ -1,8 +1,3 @@
-#these properties are not required since we're not using spring now, its spring cloud config server
-#spring:
-#  config:
-#    activate:
-#      on-profile: "prod"
 build:
   version: "1.0.0"
 

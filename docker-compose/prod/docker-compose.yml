@@ -16,8 +16,8 @@ services:
       service: network-deploy-service
 
   configserver-microservice:
-    #s6 is tag represent section 6 assignment
-    image: "jaiswalkomal18/configserver-microservice:s7"
+    #s8 is tag represent section 8 assignment - Service discovery using eureka server
+    image: "jaiswalkomal18/configserver-microservice:s8"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -64,12 +64,29 @@ services:
       file: common-config.yml
       service: microservice-mysql-config
 
+  eureka-server:
+    image: "jaiswalkomal18/eureka-server:s8"
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: "curl --fail --silent localhost:8761/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+
   accounts-microservice:
-    #s6 is tag represent section 6 assignment
-    image: "jaiswalkomal18/accounts:s7"
+    #s8 is tag represent section 8 assignment
+    image: "jaiswalkomal18/accounts:s8"
     container_name: accounts-ms
     ports:
-      - "8080:8080"
+      - "8089:8089"
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
@@ -81,7 +98,7 @@ services:
       service: microservice-configserver-config
 
   loans-microservice:
-    image: "jaiswalkomal18/loans:s7"
+    image: "jaiswalkomal18/loans:s8"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -96,7 +113,7 @@ services:
       service: microservice-configserver-config
 
   cards-microservice:
-    image: "jaiswalkomal18/cards:s7"
+    image: "jaiswalkomal18/cards:s8"
     container_name: cards-ms
     ports:
       - "9091:9091"
@@ -113,4 +130,3 @@ services:
 networks:
   komalj:
     driver: "bridge"
-

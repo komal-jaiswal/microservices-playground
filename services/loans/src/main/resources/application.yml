@@ -3,28 +3,14 @@ server:
 spring:
   application:
     name: "loans"
-  config:
-    import: "configserver:http://localhost:8071/"
+  profiles:
+    active: "prod"
   #Here we are mentioning where is our message queue
   rabbitmq:
-    host: "localhost"
+    host: rabbitmq
     port: 5672
     username: "guest"
     password: "guest"
-#commenting H2 db conf since we are going to use mysql db
-#  datasource:
-#    url: jdbc:h2:mem:testdb
-#    driverClassName: org.h2.Driver
-#    username: sa
-#    password: ''
-#  h2:
-#    console:
-#      enabled: true
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3308/loansdb
     username: root
@@ -53,11 +39,11 @@ endpoints:
 eureka:
   instance:
     prefer-ip-address: true
-    client:
-      fetchRegistry: true
-      registerWithEureka: true
-      serviceUrl:
-        defaultZone: http://localhost:8761/eureka/
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
       #This info is being displayed on Eureka dashboard
 info:
   app:

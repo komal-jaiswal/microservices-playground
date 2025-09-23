@@ -36,6 +36,25 @@ mvn compile jib:dockerBuild -Dimage=jaiswalkomal18/cards:s6
 docker image push docker.io/jaiswalkomal18/configserver-microservice:s6
 docker compose up -d
 
+jib:dockerbuild ---->local build of docker images
+jib:build --->remote build
+
+option 1: rebuild images with jib then Re-run compose
+cd accounts
+mvn clean compile jib:dockerBuild -Dimage=accounts:s7
+docker compose up -d
+Jib will rebuild the local image.
+When you restart Compose, it will use the new image.
+If a container is already running, add --force-recreate:
+docker-compose up -d --force-recreate --build
+
+option 2: push to dockerhub then pull images and then run compose
+cd accounts
+mvn clean compile jib:build -Dimage=jaiswalkomal18accounts -->since we have used jib:build this generate remote image not local one
+docker compose pull
+docker compose up -d
+ To check service is up
+docker exec -it eureka-server curl http://localhost:8761/actuator/health
 hookdeck
 url : https://console.hookdeck.com
 brew install hookdeck/hookdeck/hookdeck
