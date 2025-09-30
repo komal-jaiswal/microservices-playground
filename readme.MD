@@ -15,6 +15,8 @@ run mysql image for three DB's -> Account,loan,cards
    docker run -p 3308:3306 --name loansdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=loansdb -d mysql
 Test DB connection in sqlectron for all 3 DB's
 Run account ms, followed by loans and cards (springboot application)
+4. check all three microservices are listed in Eureka server also gateway -->http://localhost:8761
+5. using actuator endpoint of api gateway 
 Run API gateway
 
 Current issues:
