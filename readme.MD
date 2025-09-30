@@ -18,6 +18,7 @@ Run account ms, followed by loans and cards (springboot application)
 4. check all three microservices are listed in Eureka server also gateway -->http://localhost:8761
 5. using actuator endpoint of api gateway 
 Run API gateway
+6. official doc spring cloud gateway-please read https://spring.io/projects/spring-cloud-gateway
 
 Current issues:
 1. unable to start eureka server
