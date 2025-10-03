@@ -1,0 +1,6 @@
+api-gateway/target
+services/**/target
+eurekaserver/target
+configserver/target
+
+.idea
