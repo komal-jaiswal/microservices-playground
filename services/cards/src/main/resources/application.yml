@@ -28,6 +28,15 @@ management:
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true # enables /actuator/health/liveness and /actuator/health/readiness
+  health: #this is to first make sure config server is live and ready to accept traffic then only start account/loan and card ms
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+
   #this info enabled true is allowing to show info properties on Eureka dashBOARD
   info:
     env:

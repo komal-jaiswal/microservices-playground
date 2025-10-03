@@ -16,8 +16,8 @@ services:
       service: network-deploy-service
 
   configserver-microservice:
-    #s8 is tag represent section 8 assignment - Service discovery using eureka server
-    image: "jaiswalkomal18/configserver-microservice:s8"
+    #s9 is tag represent section 8 assignment - Service discovery using eureka server
+    image: "jaiswalkomal18/configserver-microservice:s9"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -25,8 +25,8 @@ services:
       rabbit:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8071/actuator/health"]
-#     test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: ["CMD", "curl", "-f", "http://localhost:8071/actuator/health" ]
+      #     test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -66,12 +66,12 @@ services:
       service: microservice-mysql-config
 
   eureka-server:
-    image: "jaiswalkomal18/eureka-server:s8"
+    image: "jaiswalkomal18/eureka-server:s9"
     container_name: eureka-server
     ports:
       - 8761:8761
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -87,11 +87,17 @@ services:
         condition: service_healthy
 
   accounts-microservice:
-    #s8 is tag represent section 8 assignment
-    image: "jaiswalkomal18/accounts:s8"
+    #s9 is tag represent section 8 assignment
+    image: "jaiswalkomal18/accounts:s9"
     container_name: accounts-ms
     ports:
       - "8089:8089"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8089/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
@@ -103,10 +109,16 @@ services:
       service: microservice-configserver-config
 
   loans-microservice:
-    image: "jaiswalkomal18/loans:s8"
+    image: "jaiswalkomal18/loans:s9"
     container_name: loans-ms
     ports:
       - "8090:8090"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8090/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     environment:
       SPRING_APPLICATION_NAME: "loans"
       SPRING_DATASOURCE_URL: "jdbc:mysql://loansdb:3306/loansdb"
@@ -118,10 +130,16 @@ services:
       service: microservice-configserver-config
 
   cards-microservice:
-    image: "jaiswalkomal18/cards:s8"
+    image: "jaiswalkomal18/cards:s9"
     container_name: cards-ms
     ports:
       - "9091:9091"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9091/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
       cardsdb:
         condition: service_healthy
@@ -131,6 +149,25 @@ services:
     extends:
       file: common-config.yml
       service: microservice-configserver-config
+  api-gateway:
+    image: "jaiswalkomal18/api-gateway:s9"
+    container_name: api-gateway-ms
+    ports:
+      - "8072:8072"
+    depends_on:
+      accounts-microservice:
+        condition: service_healthy
+      loans-microservice:
+        condition: service_healthy
+      cards-microservice:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "api-gateway"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver-microservice:8071/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
 networks:
   komalj:

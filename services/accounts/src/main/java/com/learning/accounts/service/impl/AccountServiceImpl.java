@@ -15,6 +15,8 @@ import com.learning.accounts.repository.BookingSlotRepository;
 import com.learning.accounts.repository.CustomerRepository;
 import com.learning.accounts.service.IAccountService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -31,13 +33,14 @@ public class AccountServiceImpl implements IAccountService {
     private CustomerRepository customerRepository;
 
     private BookingSlotRepository bookingSlotRepository;
+    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     /**
      * @param customerDto
      */
     @Override
     public void createAccount(CustomerDto customerDto) {
-
+       // logger.debug("received mylearning-coorelation-id inside accountServiceImpl : {}", correlaiton_id);
         Customer customerEntity = CustomerMapper.mapToCustomer(customerDto, new Customer());
         Optional<Customer> alreadyExists = customerRepository.findByMobileNumber(customerEntity.getMobileNumber());
         if (alreadyExists.isPresent()) {
@@ -113,7 +116,7 @@ public class AccountServiceImpl implements IAccountService {
             return false;
         }
         bookingSlotRepository.bookSlot(slotRequest.getStoreId(), newSlot);
-        LinkedList<Integer> list=new LinkedList<>();
+        LinkedList<Integer> list = new LinkedList<>();
 
 
         return false;

@@ -58,6 +58,10 @@ docker compose pull
 docker compose up -d
  To check service is up
 docker exec -it eureka-server curl http://localhost:8761/actuator/health
+
+✅ Option 3: Debug the healthcheck result
+Run:
+docker inspect --format='{{json .State.Health}}' <container_id>
 hookdeck
 url : https://console.hookdeck.com
 brew install hookdeck/hookdeck/hookdeck

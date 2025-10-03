@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -33,12 +35,13 @@ public class AccountsController {
 
     //@Autowired
     private final Environment environment;
-
+    private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
     @Autowired
     private CustomerInfoDetails customerInfoDetails;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createAccount(@RequestBody @Valid CustomerDto customerDto) {
+    public ResponseEntity<ResponseDto> createAccount(@RequestBody @Valid CustomerDto customerDto,@RequestHeader("mylearning-correlation-id") String correlationId) {
+        logger.debug("mylearning-correlation-id found :{}",correlationId);
         accountService.createAccount(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDto(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201));

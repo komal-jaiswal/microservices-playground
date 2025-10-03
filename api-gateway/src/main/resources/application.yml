@@ -20,8 +20,6 @@ spring:
       environment:
         JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
-  config:
-    import: "configserver:http://localhost:8071/"
 management:
   endpoints:
     web:
@@ -40,3 +38,16 @@ info:
     name: "api-gateway"
     description: "API-Gateway micro service"
     version: "1.0.0"
+logging:
+  level:
+    com:
+      learning:
+        api_gateway: DEBUG
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
