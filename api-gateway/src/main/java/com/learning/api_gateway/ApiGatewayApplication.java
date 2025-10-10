@@ -22,6 +22,7 @@ public class ApiGatewayApplication {
                         .path("/learning/accounts/**")
                         .filters(f -> f.rewritePath("/learning/accounts/(?<segment>.*)", "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("accountsCircuitBreaker"))
                         )
 
                         .uri("lb://ACCOUNTS"))
