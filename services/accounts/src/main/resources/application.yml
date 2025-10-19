@@ -63,3 +63,12 @@ logging:
     com:
       learning:
         accounts: DEBUG
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration:
+          seconds: 2
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2

@@ -4,6 +4,7 @@ package com.learning.accounts.controller;
 import com.learning.accounts.constants.AccountConstants;
 import com.learning.accounts.dto.*;
 import com.learning.accounts.service.IAccountService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,8 +41,8 @@ public class AccountsController {
     private CustomerInfoDetails customerInfoDetails;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createAccount(@RequestBody @Valid CustomerDto customerDto,@RequestHeader("mylearning-correlation-id") String correlationId) {
-        logger.debug("mylearning-correlation-id found :{}",correlationId);
+    public ResponseEntity<ResponseDto> createAccount(@RequestBody @Valid CustomerDto customerDto, @RequestHeader("mylearning-correlation-id") String correlationId) {
+        logger.debug("mylearning-correlation-id found :{}", correlationId);
         accountService.createAccount(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDto(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201));
@@ -94,9 +95,17 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
     }
 
+    @Retry(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
-        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("java.version", "21"));
+        logger.debug("getJavaVersion() method called");
+        throw new NullPointerException();
+//        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("java.version", "21"));
+    }
+
+    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
+        logger.debug("getJavaVersionFallback() method called");
+        return ResponseEntity.status(HttpStatus.OK).body("21");
     }
 
     @GetMapping("/contact-info")

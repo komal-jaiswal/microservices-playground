@@ -14,8 +14,8 @@ spring:
               enabled: false
               lower-case-service-id: true
     httpclient:
-      connect-timeout: 1000
-      response-timeout: 2s
+      connect-timeout: 10
+      response-timeout: 1s
   services:
     api-gateway:
       build: .

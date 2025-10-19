@@ -1,5 +1,7 @@
 server:
   port: 8090
+build:
+  version: "1.0.0"
 spring:
   application:
     name: "loans"
@@ -20,6 +22,12 @@ spring:
   sql:
     init:
       mode: always
+  retry:
+    delay: 400L
+    maxDelay: 10000L
+    maxAttempts: 3
+    multiplier: 2.0
+    random: true
 management:
   endpoints:
     web:
@@ -58,4 +66,13 @@ info:
     name: "loans"
     description: "Loans micro service"
     version: "1.0.0"
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration:
+          seconds: 2
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
 

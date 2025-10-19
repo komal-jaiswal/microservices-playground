@@ -1,10 +1,12 @@
 package com.learning.loans.controller;
 
 import com.learning.loans.constants.LoansConstants;
+import com.learning.loans.dto.CustomerInfoDetailsDto;
 import com.learning.loans.dto.ErrorResponseDto;
 import com.learning.loans.dto.LoansDto;
 import com.learning.loans.dto.ResponseDto;
 import com.learning.loans.service.ILoansService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,9 +16,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +39,18 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 public class LoansController {
-
     private ILoansService iLoansService;
+    @Value("${build.version:unknown}")
+    private String buildVersion;
+
+    @Autowired
+    private CustomerInfoDetailsDto customerInfoDetailsDto;
+    private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
+
+
 
     @Operation(
             summary = "Create Loan REST API",
@@ -56,8 +72,8 @@ public class LoansController {
     )
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createLoan(@RequestParam
-                                                      @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                      String mobileNumber) {
+                                                  @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                  String mobileNumber) {
         iLoansService.createLoan(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -82,10 +98,16 @@ public class LoansController {
             )
     }
     )
+    @Retryable(maxAttemptsExpression = "${spring.retry.maxAttempts}",
+            backoff = @Backoff(delayExpression = "${spring.retry.delay}", maxDelayExpression = "${spring.retry.maxDelay}",
+                    multiplierExpression = "${spring.retry.multiplier}",
+                    randomExpression = "${spring.retry.random}"))
     @GetMapping("/fetch")
     public ResponseEntity<LoansDto> fetchLoanDetails(@RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                               String mobileNumber) {
+                                                     @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                     String mobileNumber) {
+        logger.info("Invoked loans fetch API {}");
+        // throw new RuntimeException(); added to see retry
         LoansDto loansDto = iLoansService.fetchLoan(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
@@ -110,16 +132,16 @@ public class LoansController {
                             schema = @Schema(implementation = ErrorResponseDto.class)
                     )
             )
-        }
+    }
     )
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
         boolean isUpdated = iLoansService.updateLoan(loansDto);
-        if(isUpdated) {
+        if (isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_UPDATE));
@@ -150,18 +172,37 @@ public class LoansController {
     )
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteLoanDetails(@RequestParam
-                                                                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                                String mobileNumber) {
+                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                         String mobileNumber) {
         boolean isDeleted = iLoansService.deleteLoan(mobileNumber);
-        if(isDeleted) {
+        if (isDeleted) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
-        }else{
+        } else {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
         }
     }
 
+    @GetMapping("/fetch-details")
+    public ResponseEntity<CustomerInfoDetailsDto> fetchCustomerInfo() {
+        return ResponseEntity.status(HttpStatus.OK).body(customerInfoDetailsDto);
+    }
+
+
+    @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallback")
+    @GetMapping("/version")
+    public ResponseEntity<String> getVersionDetails() {
+        logger.debug("getBuildInfo() method invoked");
+        throw new NullPointerException();
+       // return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+
+    public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
+        logger.debug("getBuildInfoFallback() method invoked");
+        return ResponseEntity.status(HttpStatus.OK).body("0.9");
+    }
 }
